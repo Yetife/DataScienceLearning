@@ -1,0 +1,79 @@
+---
+title: "Statistics"
+author: "Yetunde"
+date: "12/7/2021"
+output: pdf_document
+---
+
+```{r}
+dt <- read.csv("~/Documents/R/house.csv", sep=",", header=T)
+t.test(dt$Price, mu=3000)
+t.test
+```
+
+```{r}
+ct <- read.csv("~/Documents/R/cancer.csv", sep=",", header = T)
+t.test(ct$area_se~ct$diagnosis, alternative="two.sided")
+t.test
+```
+
+```{r}
+x <- c(239, 170, 182, 143, 141, 170, 160, 154, 185, 130)
+
+y <- c(362, 343, 330, 340, 314, 567, 292, 439, 312, 292)
+
+paired_1 <- t.test(y,x, paired = TRUE)
+
+paired_1
+```
+```{r}
+suicide <- read.csv("~/Documents/R/master.csv", header = T)
+#count rows and columns
+dim(suicide)
+
+head(suicide, 10)
+```
+```{r}
+ct <- table(suicide$age, suicide$suicides.100k.pop)
+chisq.test(ct)
+```
+
+```{r}
+cancer_anova <- read.csv("~/Documents/R/gapC.csv", sep = ",", header = T)
+cancer_anova
+```
+```{r}
+str(cancer_anova)
+```
+```{r}
+na.omit(cancer_anova)
+```
+```{r}
+means <- round(tapply(cancer_anova$breastcancer, cancer_anova$continent, mean), digits = 2)
+```
+
+```{r}
+plotmeans(cancer_anova$breastcancer~cancer_anova$continent, digits = 2, ccol="red", mean.labels=T, main="Plot of breast cancer means by continent")
+```
+```{r}
+boxplot(cancer_anova$breastcancer ~ cancer_anova$continent, main="Breast cancer by continent (mean is black dot)", 
+        xlab = "continents", ylab = "new cases per 100,000 residents", col= rainbow(7))
+points(means, col="black", pch=18)
+```
+```{r}
+aov_cont <- aov(cancer_anova$breastcancer ~ cancer_anova$continent)
+summary(aov_cont) #here i see results for my ANOVA test
+```
+```{r}
+tuk <- TukeyHSD(aov_cont)
+plot(tuk)
+```
+```{r}
+tuk
+```
+```{r}
+size <- c(3,4,5,6,4,5,6,7,7,8,9,10)
+pop <- c("A", "A", "A", "A", "B", "B", "B", "B", "C", "C", "C", "C")
+library(gplots)
+boxplot(size~pop)
+```

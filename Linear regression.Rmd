@@ -1,0 +1,30 @@
+---
+title: "Linear regression"
+author: "Yetunde"
+date: "12/8/2021"
+output: html_document
+---
+
+```{r}
+iris <- read.csv("~/Documents/R/iris.data", sep = ",", header = T)
+iris
+```
+
+```{r}
+na.omit(iris)
+```
+
+```{r}
+ml <- lm(X5.1 ~ X3.5, data = iris)
+summary(ml)
+```
+
+```{r}
+hs <- read.csv("~/Documents/R/house.csv", header = T)
+str(hs)
+```
+
+```{r}
+plot(house$Price ~ house$MLS. + house.Location + house$Bedrooms + house$Bathrooms + house$SQFT + house.Price.SQFT + house$Status)
+plot
+```
