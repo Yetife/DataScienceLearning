@@ -1,0 +1,56 @@
+---
+title: "database"
+author: "Yetunde"
+date: "11/30/2021"
+output: html_document
+---
+
+```{r}
+host <- "courses.csrrinzqubik.us-east-1.rds.amazonaws.com"
+connect <- dbConnect(MySQL(), dbname = "tweater", 
+host = host, port = 3306, user = "student", password = "datacamp")
+
+tables <- dbListTables(connect)
+tables
+```
+
+```{r}
+users <- dbReadTable(connect, "users")
+users
+```
+
+```{r}
+tables <- dbReadTable(connect, "comments")
+tables
+```
+```{r}
+tables <- dbReadTable(connect, "tweats")
+tables
+```
+```{r}
+write.csv(tables, "comments.csv")
+```
+
+```{r}
+host <- "car-simulation-station.c9az8e0qjbgo.us-east-1.rds.amazonaws.com"
+connect <- dbConnect(MySQL(), dbname = "car_simulation_station", 
+                     host = host, port= 3306, user = "datacamp_user", password = "learn tabular data for fun and profit")
+
+tables <- dbListTables(connect)
+tables
+
+home <- dbReadTable(connect,  "adhd_home_cleaned")
+home
+
+father <- dbReadTable(connect, "bapq_father_self_report_cleaned")
+father
+
+write.csv(home, "adhd_home_cleaned")
+
+write.csv(father, "bapq_father_self_report_cleaned")
+```
+
+```{r}
+bcancer <- read.csv("https://raw.githubusercontent.com/mGalarnyk/Python_Tutorials/master/Kaggle/BreastCancerWisconsin/data/data.csv", header =T)
+str(bcancer)
+```
