@@ -1,0 +1,48 @@
+---
+title: "Dimensional Reduction Method"
+author: "Yetunde"
+date: "1/12/2022"
+output: html_document
+---
+
+```{r}
+data("USArrests")
+
+head(USArrests)
+```
+```{r}
+results <- prcomp(USArrests, scale = TRUE)
+
+results$rotation <- -1*results$rotation
+results$rotation
+```
+```{r}
+results$x <- -1*results$x
+
+head(results$x)
+```
+```{r}
+biplot(results, scale = 0)
+
+head(USArrests[order(-USArrests$Murder),])
+
+results$sdev^2 / sum(results$sdev^2)
+```
+
+```{r}
+train <- read.csv("~/Documents/R/train.csv", sep=",", header = T)
+train
+
+Labels<-train$label
+
+train$label<-as.factor(train$label)
+
+colors = rainbow(length(unique(train$label)))
+
+names(colors) = unique(train$label)
+```
+
+```{r}
+tsne <- Rtsne(train[,-1], dims = 2, perplexity=30, verbose=TRUE, max_iter = 500)
+exeTimeTsne<- system.time(Rtsne(train[,-1], dims = 2, perplexity=30, verbose=TRUE, max_iter = 500))
+```
