@@ -1,0 +1,23 @@
+---
+title: "Machine learning algorithm"
+author: "Yetunde"
+date: "1/11/2022"
+output: html_document
+---
+
+```{r}
+library(caTools)
+library(caret)
+library(randomForest)
+
+auto_mobile <- read.csv("~/Documents/R/Automobile_data.csv", sep=",", header = T)
+auto_mobile 
+
+dt <- sample.split(auto_mobile, SplitRatio = 0.75)
+train <- subset(auto_mobile, dt==T)
+test <- subset(auto_mobile, dt==F)
+str(test)
+```
+```{r}
+table(train[, c('price', 'make')])
+```
