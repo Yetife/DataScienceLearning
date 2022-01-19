@@ -1,0 +1,112 @@
+---
+title: "Untitled"
+author: "Yetunde"
+date: "12/1/2021"
+output: pdf_document
+---
+
+```{r}
+library(hflights)
+data(hflights)
+View(hflights)
+```
+Using filter function
+```{r}
+library(hflights)
+data(hflights)
+filter(hflights, Year == 2011, Month == 2)
+```
+
+```{r}
+uniq <- filter(hflights, UniqueCarrier == "AA", Year == 2011, Month == 2)
+uniq
+```
+
+```{r}
+dest <- filter(hflights, Dest %in% c("FLL", "IAH"))
+dest
+```
+
+```{r}
+btw <- filter(hflights, between(Distance, 244, 944))[, 3:14]
+btw
+```
+
+```{r}
+btw <- filter(hflights, between(ArrTime, 2106, 2322))[, 3:14]
+btw
+```
+
+
+```{r}
+departure <- filter(hflights, Year == 2011, Month == 4)
+departure
+```
+
+```{r}
+uniq <- filter(hflights, UniqueCarrier == c("AA", "WN"), Year == 2011, Month == 4)
+uniq
+```
+Using Arrange function
+```{r}
+arr_1 <- arrange(hflights, Year, Month)
+arr_1
+```
+
+```{r}
+descending <- arrange(hflights, desc(ArrDelay))
+descending
+```
+Using Select function
+```{r}
+sel <- select(hflights, Year, Month, FlightNum, AirTime)[1:4,]
+sel
+```
+
+```{r}
+sel_2 <- select(hflights, tail_num = TailNum)[1:5,]
+sel_2
+```
+
+```{r}
+ren_1 <- rename(hflights, tail_num = TailNum)
+ren_1
+```
+
+```{r}
+starts <- select(hflights, starts_with("Dep"), starts_with("Arr"))
+starts
+```
+
+```{r}
+vars <- c("Year", "Month", "DayofMonth", "ArrTime")
+s_1 <- select(hflights, one_of(vars))
+
+head(s_1)[1:6,]
+```
+
+```{r}
+hflights %>% select(ends_with("Delay"), Distance, AirTime) %>%
+  mutate(time_gain = ArrDelay - DepDelay, speed = Distance/AirTime * 60)
+```
+Using Summarise function, it summarise variable of existing table
+```{r}
+#Summarise with group_by
+hflights %>% group_by(Year, Month, DayofMonth) %>% 
+  summarise(delay = mean(DepDelay, na.rm = TRUE))
+```
+
+```{r}
+summarise(hflights, Delay = sum(DepDelay , na.rm = TRUE))
+```
+
+```{r}
+hflights %>% group_by(Year, Month, DayofMonth) %>%
+  summarise(DepDelay = n())
+```
+
+```{r}
+sel <- select(hflights, AirTime, ActualElapsedTime, FlightNum)
+sel <- filter(UniqueCarrier == c("AA", "WN", "CO"))
+sel
+```
