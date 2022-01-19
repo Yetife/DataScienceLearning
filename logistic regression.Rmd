@@ -1,0 +1,27 @@
+---
+title: "Logistic regression"
+author: "Yetunde"
+date: "1/10/2022"
+output: html_document
+---
+
+```{r}
+head(mtcars)
+distance_mat <- dist(mtcars, method = 'euclidean')
+distance_mat
+```
+```{r}
+set.seed(240)
+Hierar_cl <- hclust(distance_mat, method = "average")
+Hierar_cl
+
+plot(Hierar_cl)
+abline(h = 110, col = "green")
+
+fit <- cutree(Hierar_cl, k = 3)
+fit
+table(fit)
+rect.hclust(Hierar_cl, k = 3, border = "green")
+```
+
+
