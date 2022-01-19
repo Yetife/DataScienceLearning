@@ -1,0 +1,14 @@
+---
+title: "Time series analysis"
+author: "Yetunde"
+date: "1/18/2022"
+output: html_document
+---
+
+```{r}
+data <- read.csv("~/Documents/R/crudeoilprices.csv")
+data
+
+tsData <- ts(data[2:25,2], start=c(2011,1), frequency=12)
+plot(tsData)
+```
