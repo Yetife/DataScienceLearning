@@ -1,0 +1,114 @@
+---
+title: "Time series project"
+author: "Yetunde"
+date: "1/19/2022"
+output: html_document
+---
+
+```{r}
+library(readr)
+library(fUnitRoots)
+library(lmtest)
+library(FitAR)
+library(forecast)
+library(urca)
+```
+
+```{r}
+interest_rate <- read.csv("~/Documents/R/world-lendinginterestrate.xlsx - Data.csv")
+View(interest_rate)
+```
+
+```{r}
+tsinterest <- ts(interest_rate[2:51, 2], start = 1976, frequency = 12)
+```
+plotting the graph of our time series dataset
+```{r}
+plot(tsinterest)
+```
+checking for missing value
+```{r}
+sum(is.na(tsinterest))
+```
+
+```{r}
+summary(ur.df(y=tsinterest, type = "none", lags = 1))
+```
+
+```{r}
+timeseriescomponents <- decompose(tsinterest)
+plot(timeseriescomponents)
+```
+
+```{r}
+my_urkpssTest <- function(x, type, lags, use.lag, doplot){
+  x <- as.vector(x)
+  urca <- urca::ur.kpss(x, type = type[1], lags = lags[1], use.lag = use.lag)
+  output = capture.output(urca::summary(urca))[-(1:4)]
+  output = output[-length(output)]
+  for (i in 1:length(output))  output[i] = paste(" ", output[i])
+  ans = list(name = "ur.kpss", test = urca, output = output)
+  if (doplot)
+    plot(urca)
+  new("fHTEST", call = match.call(), data = list(x = x),
+    test = ans, title = "KPSS Unit Root Test", description())
+}
+
+my_urkpssTest(tsinterest, type = c("tau"), lags = c("short"), use.lag = NULL, doplot = TRUE)
+```
+
+```{r}
+tsstationary <- diff(tsinterest, differences=1)
+plot(tsstationary)
+```
+
+```{r}
+acf(tsinterest, lag.max = 34)
+pacf(tsinterest, lag.max = 34)
+```
+
+```{r}
+timeseriesseasonallyadjusted <- tsinterest - timeseriescomponents$seasonal
+plot(timeseriesseasonallyadjusted)
+par(mfrow=c(2,1))
+```
+
+```{r}
+timeseriesseasonallyadjusted <- tsinterest - timeseriescomponents$seasonal
+plot(tsstationary)
+par(mfrow=c(2,1))
+tsstationary<- diff(timeseriesseasonallyadjusted, differences = 1)
+plot(tsstationary)
+```
+
+fitting a table series model
+```{r}
+set.seed(51)
+fitARIMA<-arima(tsinterest, order=c(0,1,0), seasonal = list(order = c(1,0,1), period = 12), method = "ML")
+fitARIMA
+```
+
+```{r}
+coeftest(fitARIMA)
+par(mfrow=c(1,1))
+#checking for autocorrelation between the lagged periods
+acf(fitARIMA$residuals)
+```
+
+```{r}
+boxresult <- LjungBoxTest (fitARIMA$residuals, k=2, StartLag=1)
+par(mfrow=c(2,1))
+plot(boxresult[,3], main= "Ljung-Box Q Test", ylab="P-values", xlab="Lag")
+```
+
+```{r}
+qqnorm(fitARIMA$residuals)
+qqline(fitARIMA$residuals)
+```
+
+```{r}
+par(mfrow=c(1,1))
+predict(fitARIMA, n.ahead = 5)
+futurVAl <- forecast.Arima(fitARIMA, h=10, level=c(99.5))
+plot.forecast(futurVal)
+```
