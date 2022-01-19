@@ -20,11 +20,27 @@ summary(ml)
 ```
 
 ```{r}
-hs <- read.csv("~/Documents/R/house.csv", header = T)
-str(hs)
+house <- read.csv("~/Documents/R/house.csv", header = T)
+str(house)
 ```
 
 ```{r}
-plot(house$Price ~ house$MLS. + house.Location + house$Bedrooms + house$Bathrooms + house$SQFT + house.Price.SQFT + house$Status)
+plot(house$Price ~ house$MLS. + house$Location + house$Bedrooms + house$Bathrooms + house$SQFT + house$Price.SQFT + house$Status)
 plot
+```
+
+
+
+```{r}
+ml <- lm(house$Price ~ house$Bedrooms + house$Bathrooms + house$SQFT + house$Status, data = house)
+summary(ml)
+```
+
+```{r}
+boxplot(Price~Status, data = house, main = "price")
+boxplot(Price~Bedrooms, data = house, main = "price")
+boxplot(Price~Bathrooms, data = house, main = "price")
+boxplot(Price~SQFT, data = house, main = "price")
+
+hist(house$SQFT, xlab="SQFT", main="Histogram of Price")
 ```
