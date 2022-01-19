@@ -1,0 +1,214 @@
+---
+title: "learningR"
+author: "Yetunde"
+date: "11/25/2021"
+output: html_document
+---
+
+```{r}
+34 + 5
+```
+
+```{r}
+45 * 2
+```
+
+```{r}
+names <- c("John", "Harrison", "Bolu")
+names
+```
+
+```{r}
+x<- 2+3
+y<-(5*11)/4-7
+s<-7^3
+x
+y
+s
+```
+sequence and matrix
+```{r}
+x<- 1:50
+x
+length(x)
+X<-seq(1,9,by =2)
+X
+
+name<- matrix(1:16, nrow = 4, ncol = 4)
+name
+
+
+dim(name)
+
+numb<- c(1:10)
+dim(numb) <- c(2,5)
+numb
+```
+
+```{r}
+m <- matrix(1:4, nrow = 2, ncol = 2)
+colnames(m) <- c("a", "b")
+rownames(m) <- c("c", "d")
+m
+```
+
+```{r}
+x <- 1:4
+y <- 5:8
+
+M <- cbind(x, y)
+
+Q <- rbind(x,y)
+
+colnames(M) <- c("col1", "col2")
+rownames(M) <- c("row1", "row2", "row3", "row4")
+M
+
+colnames(Q) <- c("col1", "col2", "col3", "col4")
+rownames(Q) <- c("row1", "row2")
+Q
+
+```
+list
+```{r}
+X <- list(a =1, b = "c", c =3)
+X
+X$b
+```
+factor
+```{r}
+gender <- c("male", "male", "female", "female", "male", "female", "male")
+as.factor(gender)
+sum(is.na(gender))
+is.nan(gender)
+```
+
+```{r}
+mis <- c(1,3,4,NA,5.7)
+mean(is.na(mis))
+```
+data frame
+```{r}
+emp.data <- data.frame(emp_id = c(1:5), 
+emp_name = c("Rick", "Dan", "Michelle", "Ryan", "Gary"),
+salary = c(623.3, 515.2, 611.0, 729.0, 843.25))
+
+emp.data[3,]
+emp.data$emp_name[2]
+```
+
+```{r}
+x <- 5:7
+names(x)
+
+names(x) <- c("five", "six", "seven")
+x
+```
+```{r}
+x <- c("a", "b", "c", "d")
+x[2]
+x[1:4]
+x[x>"b"]
+```
+
+```{r}
+x <- matrix(1:6, 2,3)
+x
+x[1,2]
+x[2,1]
+x[1, 2, drop= FALSE]
+x[1,, drop= FALSE]
+```
+Subsetting a matrix
+```{r}
+x <- matrix(1:12, 3,4)
+x
+x[2:3, 2:4]
+```
+
+```{r}
+Y <- matrix(1:16, 4,4)
+colnames(Y) <- c("col1", "col2", "col3", "col4")
+Y
+Y[1,2]
+Y[1:3, 3:4]
+```
+Data frame
+
+```{r}
+file <- read.csv("~/Documents/R/Fertility (1).csv", sep=",", header=TRUE, col.names = c(1,2,3,4,5,6,7,8,9))
+file
+sum(is.na(file))
+mean(is.na(file))
+na.omit(file)
+```
+
+```{r}
+file <- read.csv("~/Documents/R/who_suicide_statistics_semi.csv", sep = ";", strip.white = TRUE)
+file
+sum(is.na(file))
+median(is.na(file))
+```
+
+
+```{r}
+auto <- read.table("https://s3.amazonaws.com/assets.datacamp.com/blog_assets/test.txt", header= FALSE)
+head(auto[,2:3])
+```
+
+```{r}
+hs <- read.csv("~/Documents/R/house.csv", sep=",")
+hs
+boxplot(Price~Status, data = hs, main = "price")
+
+plot(hs$SQFT, hs$Price, xlab="SQFT", ylab = "Price", main = "ScatterPlot of Price and SQFT")
+
+hist(hs$Price, xlab="Price", main="Histogram of Price")
+```
+
+```{r}
+cancer <- read.csv("~/Downloads/cancer.csv", sep = ",")
+cancer
+
+boxplot(radius_mean~diagnosis, data = cancer, main = "mean")
+hist(cancer$radius_mean, xlab = "dignosis_mean", main = "Histogram of radius mean")
+```
+
+```{r}
+library(readdxl)
+library(tidyverse)
+```
+
+loading mbta dataset, skipping the first row from excel sheet one pick col 2 to 60
+```{r}
+mbta <- read_excel("~/Downloads/mbta.xlsx", sheet = 1, skip = 1, range = cell_cols(2:60))
+mbta
+```
+
+gathering data from january 2007, t0 2011, january
+```{r}
+mbta <- mbta %>% gather('2007-01':'2011-10', key = "year", value = "passenger")
+mbta
+
+seperating the year into two column
+```{r}
+mbta <- mbta %>% separate(year, into = c("year", "month"))
+mbta
+```
+
+Transforming rows ro column by using pivot_wider function 
+```{r}
+mbta <- mbta %>% pivot_wider(names_from = mode, values_from = passenger)
+mbta
+```
+
+```{r}
+mbta <- mbta %>% .[, c(1:2, 6:8)]
+mbta
+                   
+```
+
+```{r}
+mbta <- mbta %>% gather('Commuter Rail':'Light Rail', key = "rail_type", value = passengers)
+mbta
+```
